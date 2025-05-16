@@ -10,26 +10,35 @@ const BurgerOpen = ref(false)
 const isAuth = inject('token')
 const role = inject('role_id')
 
+const CloseBurger = ()=>{
+  document.querySelector('#burger').classList.add('opacity-0')
+  document.querySelector('#burgerBtn').classList.remove('rotate-90')
+  document.querySelector('#burger').classList.remove('translate-x-0')
+  document.querySelector('#burger').classList.add('translate-x-full')
+
+  BurgerOpen.value = !BurgerOpen.value
+}
+
+const OpenBurger =()=>{
+  document.querySelector('#burgerBtn').classList.add('rotate-90')
+  document.querySelector('#burger').classList.remove('hidden')
+  document.querySelector('#burger').classList.remove('opacity-0')
+  document.querySelector('#burger').classList.remove('translate-x-full')
+  document.querySelector('#burger').classList.add('flex','flex-col')
+  BurgerOpen.value = !BurgerOpen.value
+}
+
 const ToggleBurger = ()=>{
   if(BurgerOpen.value){
-    document.querySelector('#burger').classList.add('opacity-0')
-    document.querySelector('#burgerBtn').classList.remove('rotate-90')
-    document.querySelector('#burger').classList.remove('translate-x-0')
-    document.querySelector('#burger').classList.add('translate-x-full')
-
-    BurgerOpen.value = !BurgerOpen.value
+    CloseBurger()
   }
   else {
-    document.querySelector('#burgerBtn').classList.add('rotate-90')
-    document.querySelector('#burger').classList.remove('hidden')
-    document.querySelector('#burger').classList.remove('opacity-0')
-    document.querySelector('#burger').classList.remove('translate-x-full')
-    document.querySelector('#burger').classList.add('flex','flex-col')
-    BurgerOpen.value = !BurgerOpen.value
+    OpenBurger()
   }
 }
 
 const logout = async ()=>{
+  CloseBurger()
   const responce = await apiFetch('GET',"/logout")
   await router.replace('/login')
 }
@@ -49,20 +58,20 @@ const logout = async ()=>{
     <div class="">
       <ul id="burger" class="transition-all right-0 gap-6 mt-12 lg:m-0 opacity-0 fixed translate-x-full lg:translate-x-0 bg-white lg:opacity-100 lg:relative lg:bg-transparent lg:flex lg:flex-row justify-around border-blue-300 p-3 border-2 lg:rounded-2xl">
         <template v-if="!isAuth">
-          <RouterLink to="/login" class="p-3  lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Авторизация</RouterLink>
-          <RouterLink to="/registration" class="p-3  lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Регистрация</RouterLink>
+          <RouterLink @click.prevent="CloseBurger" to="/login" class="p-3  lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Авторизация</RouterLink>
+          <RouterLink @click.prevent="CloseBurger" to="/registration" class="p-3  lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Регистрация</RouterLink>
 
         </template>
         <template v-if="isAuth && role==1">
-          <RouterLink to="/admin/users" class="p-3  lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Пользователи</RouterLink>
-          <RouterLink to="/admin/work-shifts" class="p-3 lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Смены</RouterLink>
-          <RouterLink to="/admin/orders" class="p-3 lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Заказы</RouterLink>
+          <RouterLink @click.prevent="CloseBurger" to="/admin/users" class="p-3  lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Пользователи</RouterLink>
+          <RouterLink @click.prevent="CloseBurger" to="/admin/work-shifts" class="p-3 lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Смены</RouterLink>
+          <RouterLink @click.prevent="CloseBurger" to="/admin/orders" class="p-3 lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Заказы</RouterLink>
         </template>
         <template v-else-if="isAuth && role==2">
-          <RouterLink to="/waiter/my-orders" class="p-3  lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Мои заказы</RouterLink>
+          <RouterLink @click.prevent="CloseBurger" to="/waiter/my-orders" class="p-3  lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Мои заказы</RouterLink>
         </template>
         <template v-else-if="isAuth && role==3">
-          <RouterLink to="/cook/orders" class="p-3  lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Заказы</RouterLink>
+          <RouterLink @click.prevent="CloseBurger" to="/cook/orders" class="p-3  lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Заказы</RouterLink>
         </template>
         <template v-if="isAuth">
           <button @click.prevent="logout" class="p-3 lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Выйти</button>
