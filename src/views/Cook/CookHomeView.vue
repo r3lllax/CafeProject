@@ -3,8 +3,9 @@
 
 <template>
   <main class="w-full flex justify-center">
-    <div class="w-full md:w-1/2 self-center border justify-center">
-      CookHome
+    <div class="w-full md:w-1/2 self-center border justify-center break-words">
+        CookHome
     </div>
   </main>
+
 </template>

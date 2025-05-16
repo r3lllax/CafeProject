@@ -5,18 +5,33 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const user_id = inject('role_id')
 onMounted(()=>{
-  console.log(user_id.value)
-  switch (user_id.value){
-    case 1:
-      router.replace('/admin')
-      break;
-    case 2:
-      router.replace('/waiter')
-      break;
-    case 3:
-      router.replace('/cook')
-      break;
+  if(user_id.value == 1){
+    router.replace('/admin')
   }
+  else if(user_id.value == 2){
+    router.replace('/waiter')
+  }
+  else if(user_id.value == 3){
+    router.replace('/cook')
+  }
+  else{
+    router.replace('/login')
+  }
+  // switch (user_id.value){
+  //   case 1:
+  //     router.replace('/admin')
+  //     break;
+  //   case 2:
+  //     router.replace('/waiter')
+  //     break;
+  //   case 3:
+  //     router.replace('/cook')
+  //     break;
+  //   default:
+  //     console.log("DEFAULT")
+  //     router.replace('/login')
+  //     break;
+  // }
 })
 </script>
 
