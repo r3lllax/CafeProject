@@ -3,7 +3,7 @@
 
 <template>
   <main class="w-full flex justify-center">
-    <div class="w-1/2 self-center border justify-center">
+    <div class="w-full md:w-1/2 self-center border justify-center">
       AdminHome
     </div>
   </main>
