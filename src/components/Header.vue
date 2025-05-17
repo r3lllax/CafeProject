@@ -47,7 +47,7 @@ const logout = async ()=>{
 
 
 <template>
-<header class="flex border-b p-2 sticky top-0 z-20 bg-blue-300 min-h-24 items-center">
+<header class="flex border-b p-2 sticky top-0 z-19 bg-blue-300 min-h-24 items-center">
   <div class="w-full flex justify-between gap-4 lg:justify-between items-center">
     <div class="w-full lg:w-fit ml-2">
       <img src="/src/assets/logo.svg" class="h-9" alt="">
@@ -59,8 +59,6 @@ const logout = async ()=>{
       <ul id="burger" class="transition-all right-0 gap-6 mt-12 lg:m-0 opacity-0 fixed translate-x-full lg:translate-x-0 bg-white lg:opacity-100 lg:relative lg:bg-transparent lg:flex lg:flex-row justify-around border-blue-300 p-3 border-2 lg:rounded-2xl">
         <template v-if="!isAuth">
           <RouterLink @click.prevent="CloseBurger" to="/login" class="p-3  lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Авторизация</RouterLink>
-          <RouterLink @click.prevent="CloseBurger" to="/registration" class="p-3  lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Регистрация</RouterLink>
-
         </template>
         <template v-if="isAuth && role==1">
           <RouterLink @click.prevent="CloseBurger" to="/admin/users" class="p-3  lg:p-2 text-zinc-700 lg:border-amber-200 bg-amber-50 lg:rounded-2xl text-xl text-center hover:bg-amber-50 transition-all hover:scale-110 hover:cursor-pointer">Пользователи</RouterLink>
