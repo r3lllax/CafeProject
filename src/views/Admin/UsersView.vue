@@ -15,12 +15,17 @@ onMounted(async ()=>{
   }
 })
 
-
+const ViewUserID = ref(null)
+provide('ViewUserId',ViewUserID)
 
 const ShowModalWs = () =>{
   modalAdd.value = false
   modalWs.value = true
   document.querySelector("#modal").classList.remove('hidden')
+}
+const ShowModalAndID = (id) =>{
+  ShowModalWs()
+  ViewUserID.value = id
 }
 
 const ShowModalReg = () =>{
@@ -57,7 +62,7 @@ const CloseModal = () =>{
                   <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{user.name}}</h5>
                   <span class="text-sm text-gray-500 dark:text-gray-400">{{ user.group }}</span>
                   <div class="flex mt-4 md:mt-6">
-                    <a @click.prevent="ShowModalWs" :class="{'bg-blue-300':user.group=='Администратор','bg-blue-700':user.group!=='Администратор','pointer-events-none': user.group=='Администратор'}" class="z-19 cursor-pointer inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Назначить на смену</a>
+                    <a @click.prevent="ShowModalAndID(user.id)" :class="{'bg-blue-300':user.group=='Администратор','bg-blue-700':user.group!=='Администратор','pointer-events-none': user.group=='Администратор'}" class="z-19 cursor-pointer inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Назначить на смену</a>
                   </div>
                 </div>
               </div>

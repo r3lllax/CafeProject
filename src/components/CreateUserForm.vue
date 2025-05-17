@@ -22,6 +22,9 @@ const sendForm = async ()=>{
   for(const key in form.value.data){
     formData.append(key,form.value.data[key])
   }
+  if(!form.value.data.photo_file){
+    formData.delete('photo_file')
+  }
   const responce = await apiFetch("post","/user",formData, false)
 
   if(responce.error){
