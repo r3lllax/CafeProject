@@ -84,9 +84,14 @@ const dragleave = (e) =>{
     </div>
     <div class="mb-5 flex flex-col">
       <label class="block mb-5 text-sm font-medium text-gray-900 dark:text-white">Фото профиля</label>
-      <label @drop.prevent="drop" :class="{'over':formStatus.status==='over','success':form.data.fileimage}" @dragleave="dragleave" @dragover="dragover" class="drop-zone">
+      <label @drop.prevent="drop" :class="{'over':formStatus.status==='over','success':form.data.photo_file}" @dragleave="dragleave" @dragover="dragover" class="drop-zone">
         <input type="file" @change="ChangeFile($event)">
-          Переместите фото сюда
+          <tempalte v-if="!form.data.photo_file">
+            Переместите фото сюда
+          </tempalte>
+        <tempalte v-else>
+          {{ form.data.photo_file.name }}
+        </tempalte>
 
       </label>
           <error-description :error="form.errors.photo_file"></error-description>

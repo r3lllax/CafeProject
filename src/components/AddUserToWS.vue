@@ -9,14 +9,17 @@ const WorkShiftInfo = ref({
   No_Work_shifts:{},
 })
 
-const id = inject('ViewUserId')
-onMounted(async function() {
+const LoadWS = async ()=>{
   const responce = await apiFetch("GET",`/user/${id.value}`)
-  console.log(responce)
   WorkShiftInfo.value.Work_shifts = responce['work_shifts']
   WorkShiftInfo.value.No_Work_shifts = responce['not-work-shifts']
-  console.log(WorkShiftInfo.value)
+}
 
+
+
+const id = inject('ViewUserId')
+onMounted(()=>{
+  LoadWS()
 })
 
 const Errors = ref({
@@ -32,7 +35,7 @@ const AddToWs = async (WSid)=>{
   }
 
   if (responce.data){
-    location.reload()
+    LoadWS()
   }
 
 }

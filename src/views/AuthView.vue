@@ -28,7 +28,7 @@ const TryLogin = async ()=>{
   form.value.isProcess = true
   const response = await apiFetch("POST","/login",form.value.data)
   if (response.error){
-    form.value.errors.error = response.error.message
+    form.value.errors.error = [response.error.message]
   }
   if(response.data){
     updateToken(response.data.user_token)

@@ -44,6 +44,7 @@ const CloseModal = () =>{
 </script>
 
 <template>
+  {{"ДОБАВИТЬ КАТЕГОРИИ АДМИН ПОВАР ОФИЦИАНТ"}}
   <main class="w-full flex justify-center">
     <div class="w-full md:w-1/2 self-center justify-center">
       <div class="p-5">

@@ -68,14 +68,6 @@ const router = createRouter({
       }
     },
     {
-      path: '/registration',
-      name: 'registration',
-      component: RegistrationView,
-      meta:{
-        forAuth:false,
-      }
-    },
-    {
       path: '/no-premissions',
       name: 'nopremissions',
       component: NoPremissionView,
