@@ -11,6 +11,7 @@ import CookHomeView from '@/views/Cook/CookHomeView.vue'
 import MyOrdersView from '@/views/Waiter/MyOrdersView.vue'
 import CookOrdersView from '@/views/Cook/CookOrdersView.vue'
 import RegistrationView from '@/views/RegistrationView.vue'
+import NotFoundView from '@/views/NotFoundView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -76,6 +77,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/:catchAll(.*)',
+      name: 'not-found',
+      component: NotFoundView,
+      meta:{
+        forAuth:false
+      }
+    },
+    {
       path: '/waiter',
       name: 'waiter',
       component:WaiterHomeView,
@@ -110,7 +119,8 @@ const router = createRouter({
         forAuth:true,
         role:3
       }
-    },
+    }
+
   ],
 })
 
@@ -120,7 +130,7 @@ router.beforeResolve(async (to)=>{
   }
 
   if(to.meta.role && to.meta.forAuth && (to.meta.role!=localStorage.getItem('role_id'))){
-    await router.replace('/no-premissions')
+    await router.replace('/not-found')
   }
 
 })

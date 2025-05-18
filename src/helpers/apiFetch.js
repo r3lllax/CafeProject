@@ -18,9 +18,9 @@ export default async function(method,route,body=null,isBlob=false){
       options.body = JSON.stringify(body)
     }
   }
-
   const responce = await fetch(`${host}${route}`,options)
   let result = null
+
   if(responce.status===401){
     window.location.replace('/login')
     localStorage.removeItem('user_token')
