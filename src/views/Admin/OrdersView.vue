@@ -86,7 +86,7 @@ const SearhOrder = async ()=>{
                   <div class="bg-sky-500 px-3 py-1 text-white rounded-full w-full md:w-fit flex self-start md:self-center items-center">ID&nbsp;{{order.id}}</div>
                   <div class=" px-3 py-1 md:justify-center flex border-t md:border-t-0 w-full gap-2 items-center self-center">
                     <span>Статус:</span>
-                    <span :class="{'bg-red-500 ':order.status=='Отменен','bg-sky-500':order.status=='Принят','bg-yelow-500':order.status=='Готовится','bg-green-600 ':order.status=='Готов','bg-green-400 ':order.status=='Оплачен',}" class="text-white rounded-full p-1">{{ order.status }}</span>
+                    <span :class="{'bg-red-500 ':order.status=='Отменен','bg-sky-500':order.status=='Принят','bg-yellow-500':order.status=='Готовится','bg-green-600 ':order.status=='Готов','bg-green-400 ':order.status=='Оплачен',}" class="text-white rounded-full p-1">{{ order.status }}</span>
                   </div>
                   <div class="px-3 md:pl-3 md:pr-2 py-1 flex items-center md:justify-center text-center gap-2">
                     <span>ДАТА:</span>
@@ -97,8 +97,7 @@ const SearhOrder = async ()=>{
                   <div class="w-full flex flex-col md:w-fit md:border-r p-5 justify-center items-center border-b md:border-b-0">
                     <span class="text-white bg-sky-500 px-2 py-1 rounded-full text-3xl text-center">{{order.table}}</span>
                   </div>
-                  <div class="w-full relative py-2 flex md:w-2/3 justify-center items-center border-b md:border-b-0">
-                    <h3 class="absolute text-xl text-neutral-500 top-1">Официант</h3>
+                  <div class="w-full  py-2 flex md:w-2/3 justify-center items-center border-b md:border-b-0">
                     <div class="w-full col-span-full md:col-span-6 lg:col-span-4">
                       <div class="w-full bg-white ">
                         <div class="flex justify-end px-4 pt-4">
