@@ -26,6 +26,14 @@ export default async function(method,route,body=null,isBlob=false){
     localStorage.removeItem('user_token')
     localStorage.removeItem('role_id')
   }
+  if (responce.status===404){
+    return {
+      error:{
+        code:404,
+        message:'Не найдено'
+      }
+    }
+  }
   try{
     if(isBlob){
       result = await responce.blob()
