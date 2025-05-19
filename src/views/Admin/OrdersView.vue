@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import apiFetch from '@/helpers/apiFetch.js'
 import ErrorDescription from '@/components/ErrorDescription.vue'
 
@@ -28,11 +28,15 @@ const GetUsers = async ()=>{
 
 }
 
-const SearhOrder = async ()=>{
+const SearhOrder = async (id)=>{
+  if(Order.value.processing){
+    return
+  }
+  lastActiveWS.value = id?id:searchForm.value.data.id
   Order.value.data.order = null
   Order.value.processing = true
   searchForm.value.errors = []
-  const responce = await apiFetch("GET",`/work-shift/${searchForm.value.data.id}/order`)
+  const responce = await apiFetch("GET",`/work-shift/${id?id:searchForm.value.data.id}/order`)
 
   if (responce.error){
     searchForm.value.errors.message = [responce.error.message]
@@ -53,21 +57,39 @@ const SearhOrder = async ()=>{
   Order.value.processing = false
 }
 
+const WorkShifts = ref(null)
+
+onMounted(async ()=>{
+  const responce = await apiFetch("get","/work-shift")
+  WorkShifts.value = responce
+})
+
+const lastActiveWS = ref(null)
 </script>
 
 <template>
   <main class="w-full flex justify-center">
-    <div class="px-2 md:px-0 w-full md:w-2/3 self-center justify-center flex flex-col items-center">
-      <div class="w-full flex flex-col md:flex-row my-5 gap-2">
-        <div class="flex flex-col w-full">
-          <input type="text" v-model="searchForm.data.id" id="search" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="ID смены"  />
-          <ErrorDescription :error="searchForm.errors.message"></ErrorDescription>
-        </div>
-        <div>
-          <button @click.prevent="SearhOrder" class="cursor-pointer w-full md:w-fit min-h-1/2 items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Найти</button>
-          <div class="min-h-1/2 w-full"></div>
-        </div>
+    <div class="px-2 md:px-0 w-full md:w-2/3 self-center justify-center flex flex-col items-center gap-6">
+<!--      <div class="w-full flex flex-col md:flex-row my-5 gap-2">-->
+<!--        <div class="flex flex-col w-full">-->
+<!--          <input type="text" v-model="searchForm.data.id" id="search" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="ID смены"  />-->
+<!--          <ErrorDescription :error="searchForm.errors.message"></ErrorDescription>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <button @click.prevent="SearhOrder" class="cursor-pointer w-full md:w-fit min-h-1/2 items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Найти</button>-->
+<!--          <div class="min-h-1/2 w-full"></div>-->
+<!--        </div>-->
 
+<!--      </div>-->
+      <div class="w-full flex flex-col gap-2">
+        <h2 class="text-4xl font-semibold">Смены</h2>
+        <ul class="w-full grid grid-cols-12 gap-2 justify-center">
+          <li @click.prevent="SearhOrder(shift.id)" :class="{'pointer-events-none':Order.processing,'bg-red-300':!shift.active,'bg-green-300':shift.active,'active':lastActiveWS == shift.id}"
+              class="transition hover:scale-110 hover:text-white hover:bg-sky-500 hover:cursor-pointer col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2 border flex justify-center p-5 text-4xl rounded-xl"
+              v-for="shift of WorkShifts">
+            {{shift.id}}
+          </li>
+        </ul>
       </div>
       <div class="bg-gray-100 w-full h-fit rounded-xl p-2" v-if="Order.data.order">
         <div v-for="WorkShift in Order.data">
@@ -156,3 +178,9 @@ const SearhOrder = async ()=>{
     </div>
   </main>
 </template>
+<style scoped>
+ .active{
+   color: white;
+   background-color: rgb(14, 148, 205);
+ }
+</style>

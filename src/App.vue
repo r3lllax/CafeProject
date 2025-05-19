@@ -5,7 +5,17 @@ import Header from '@/components/Header.vue'
 
 const role_id = ref(localStorage.getItem('role_id'))
 const token = ref(localStorage.getItem('user_token'))
+const user_id = ref(localStorage.getItem('user_id'))
 
+const updateUser_id = (newUser_id) =>{
+  if(newUser_id){
+    localStorage.setItem('user_id',newUser_id)
+  }
+  else{
+    localStorage.removeItem('user_id')
+  }
+  user_id.value = newUser_id
+}
 
 const updateToken = (newToken) =>{
   if(newToken){
@@ -30,7 +40,9 @@ const updateRoleID = (newRole)=>{
 
 provide('role_id',role_id)
 provide('token',token)
+provide('user_id',user_id)
 provide('updateRole',updateRoleID)
+provide('updateUser',updateUser_id)
 provide('updateToken',updateToken)
 
 </script>

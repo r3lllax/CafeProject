@@ -49,7 +49,7 @@ const logout = async ()=>{
 <template>
 <header style="z-index: 22;" class="flex border-b p-2 sticky top-0 z-19 bg-blue-300 min-h-24 items-center">
   <div class="w-full flex justify-between gap-4 lg:justify-between items-center">
-    <div class="w-full lg:w-fit ml-2">
+    <div @click.prevent="router.replace('/')" class="cursor-pointer w-full lg:w-fit ml-2">
       <img src="/src/assets/logo.svg" class="h-9" alt="">
     </div>
     <div id="burgerBtn" @click.prevent="ToggleBurger" class="transition-all ease-in-out w-fit cursor-pointer flex lg:hidden">

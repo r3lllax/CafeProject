@@ -7,6 +7,7 @@ import router from '@/router/index.js'
 
 const updateToken = inject('updateToken')
 const updateRole = inject('updateRole')
+const updateUser = inject('updateUser')
 
 const form = ref({
   data:{
@@ -33,6 +34,7 @@ const TryLogin = async ()=>{
   if(response.data){
     updateToken(response.data.user_token)
     updateRole(response.data.role_id)
+    updateUser(response.data.user_id)
     await router.replace('/')
 
   }
