@@ -197,7 +197,7 @@ const CreateOrder = async ()=>{
       </div>
       <div>
         <h3 class="text-xl">Столик:</h3>
-        <div class="flex gap-0.5">
+        <div class="flex gap-0.5 justify-center">
           <ul class="flex gap-1 py-3">
             <li class="flex flex-wrap gap-2">
               <button v-for="i in 10" @click.prevent="ChoiceTable(i)" :class="{'scale-150':addOrderForm.data.table_id==i}"
