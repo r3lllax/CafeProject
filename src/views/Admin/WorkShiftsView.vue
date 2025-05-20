@@ -105,7 +105,8 @@ const MakeWS = async ()=>{
             <ErrorDescription :error="data.Errors.error"></ErrorDescription>
           </li>
 
-          <li v-for="WorkShift of data.WorkShifts" :class="{'border-gray-200':(!checkboxes.find(cb =>cb.id==WorkShift.id).checked) && !checkboxes.find(cb =>cb.id==WorkShift.id).processing,'border-green-500':(checkboxes.find(cb =>cb.id==WorkShift.id).checked) && !checkboxes.find(cb =>cb.id==WorkShift.id).processing,'border-yellow-500':checkboxes.find(cb =>cb.id==WorkShift.id).processing}" class="transition border col-span-12 md:col-span-6 lg:col-span-4 p-6 bg-white rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col items-center">
+          <li v-for="WorkShift of data.WorkShifts" :class="{'blur-[2px]':(!checkboxes.find(cb =>cb.id==WorkShift.id).checked) && !checkboxes.find(cb =>cb.id==WorkShift.id).processing &&(checkboxes.find(cb =>cb.checked==true))?true:false,'border-gray-200':(!checkboxes.find(cb =>cb.id==WorkShift.id).checked) && !checkboxes.find(cb =>cb.id==WorkShift.id).processing,'border-green-500':(checkboxes.find(cb =>cb.id==WorkShift.id).checked) && !checkboxes.find(cb =>cb.id==WorkShift.id).processing,'border-yellow-500':checkboxes.find(cb =>cb.id==WorkShift.id).processing}"
+              class="transition border col-span-12 md:col-span-6 lg:col-span-4 p-6 bg-white rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col items-center">
             <a href="#">
               <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Смена {{WorkShift.id}}</h5>
             </a>

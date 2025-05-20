@@ -3,7 +3,7 @@ export default async function(method,route,body=null,isBlob=false){
   let options = {
     method:method,
     headers:{
-      Accept:'application/json'
+      Accept:'application/json',
     }
   }
   if(localStorage.getItem('user_token')){
