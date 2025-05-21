@@ -12,6 +12,7 @@ import MyOrdersView from '@/views/Waiter/MyOrdersView.vue'
 import CookOrdersView from '@/views/Cook/CookOrdersView.vue'
 import RegistrationView from '@/views/RegistrationView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
+import editOrder from '@/components/editOrder.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -118,6 +119,15 @@ const router = createRouter({
       meta:{
         forAuth:true,
         role:3
+      }
+    },
+    {
+      path: '/waiter/order/edit/:id',
+      name: 'editorder',
+      component:editOrder,
+      meta:{
+        forAuth:true,
+        role:2
       }
     }
 

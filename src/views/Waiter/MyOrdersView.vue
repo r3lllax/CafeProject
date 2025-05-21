@@ -3,6 +3,7 @@
 import { onMounted, ref } from 'vue'
 import apiFetch from '@/helpers/apiFetch.js'
 import ErrorDescription from '@/components/ErrorDescription.vue'
+import router from '@/router/index.js'
 
 const MyOrders = ref({
   data:{},
@@ -11,7 +12,10 @@ const MyOrders = ref({
 })
 
 onMounted( async ()=>{
-  LoadOrders()
+  await LoadOrders()
+  if(localStorage.getItem('lastViewOrder')){
+    OrderToFullScreenOrBack(localStorage.getItem('lastViewOrder'))
+  }
 })
 
 const LoadOrders = async ()=>{
@@ -42,7 +46,7 @@ const OrderToFullScreenOrBack = (id)=>{
   if(orderFullScreen.value.state){
     order.classList.remove('fixed','z-50','bg-white','top-0','bottom-0','left-0','right-0','backdrop-blur-xl')
     order.classList.add('hover:scale-110','bg-white','rounded-xl')
-
+    localStorage.removeItem('lastViewOrder')
   }
   else{
     order.classList.add('fixed','z-50','bg-white','top-0','bottom-0','left-0','right-0','backdrop-blur-xl')
@@ -99,6 +103,19 @@ const CreateOrder = async ()=>{
   }
   addOrderForm.value.isProcess = false
 }
+
+const EditMode = ref({
+  Enabled:false,
+})
+
+const toggleEditMode = ()=>{
+  EditMode.value.Enabled = !EditMode.value.Enabled
+}
+
+const editOrder = async (id)=>{
+  await router.replace(`/waiter/order/edit/${id}`)
+}
+
 </script>
 
 <template>
@@ -144,17 +161,41 @@ const CreateOrder = async ()=>{
                         {{position.price}}
                       </span>
                     </div>
+                    <div v-if="EditMode.Enabled" class="transition bg-red-600 my-2 rounded-full hover:bg-red-800 cursor-pointer hover:scale-110">
+                      <svg class="w-fit h-10 scale-50" fill="#FFFFFF" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64px" height="64px" viewBox="0 0 482.428 482.429" xml:space="preserve" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-background-000000, #000000);"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g>
+                        <path d="M381.163,57.799h-75.094C302.323,25.316,274.686,0,241.214,0c-33.471,0-61.104,25.315-64.85,57.799h-75.098 c-30.39,0-55.111,24.728-55.111,55.117v2.828c0,23.223,14.46,43.1,34.83,51.199v260.369c0,30.39,24.724,55.117,55.112,55.117 h210.236c30.389,0,55.111-24.729,55.111-55.117V166.944c20.369-8.1,34.83-27.977,34.83-51.199v-2.828 C436.274,82.527,411.551,57.799,381.163,57.799z M241.214,26.139c19.037,0,34.927,13.645,38.443,31.66h-76.879 C206.293,39.783,222.184,26.139,241.214,26.139z M375.305,427.312c0,15.978-13,28.979-28.973,28.979H136.096 c-15.973,0-28.973-13.002-28.973-28.979V170.861h268.182V427.312z M410.135,115.744c0,15.978-13,28.979-28.973,28.979H101.266 c-15.973,0-28.973-13.001-28.973-28.979v-2.828c0-15.978,13-28.979,28.973-28.979h279.897c15.973,0,28.973,13.001,28.973,28.979 V115.744z"></path> <path d="M171.144,422.863c7.218,0,13.069-5.853,13.069-13.068V262.641c0-7.216-5.852-13.07-13.069-13.07 c-7.217,0-13.069,5.854-13.069,13.07v147.154C158.074,417.012,163.926,422.863,171.144,422.863z"></path> <path d="M241.214,422.863c7.218,0,13.07-5.853,13.07-13.068V262.641c0-7.216-5.854-13.07-13.07-13.07 c-7.217,0-13.069,5.854-13.069,13.07v147.154C228.145,417.012,233.996,422.863,241.214,422.863z"></path> <path d="M311.284,422.863c7.217,0,13.068-5.853,13.068-13.068V262.641c0-7.216-5.852-13.07-13.068-13.07 c-7.219,0-13.07,5.854-13.07,13.07v147.154C298.213,417.012,304.067,422.863,311.284,422.863z">
+
+                      </path>
+                      </g>
+                      </g>
+                      </g>
+                      </svg>
+
+                    </div>
                   </li>
                 </ul>
+                <li @click.prevent="editOrder(order.id)" class="hover:bg-blue-400 hover:text-white hover:scale-[1.01] relative transition cursor-pointer border-gray-200 border col-span-12 p-6 bg-white rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-center items-center text-neutral-500">
+                  <div class="w-full h-full peer absolute top-0 bottom-0 right-0 left-0"></div>
+                  <span class="transition duration-700 peer-hover:scale-[2] peer-hover:rotate-[360deg] peer-hover:font-bold">+</span>
+                </li>
               </div>
               <div class="w-full flex justify-center flex-col lg:flex-row items-center gap-1">
-                <button @click.prevent="OrderToFullScreenOrBack(order.id)" class="z-1 text-center transition ease-out overflow-hidden relative hover:scale-110 border w-fit px-3 py-2 rounded-2xl flex items-center text-white before:transition before:ease-out before:duration-700 before:absolute before:bg-sky-800 before:rounded-full before:min-w-10 before:min-h-10 before:text-white before:translate-x-[6rem] before:translate-y-[2.6rem] hover:before:scale-[10] hover:text-white hover:shadow-lg before:-z-10 font-semibold bg-sky-500">
+                <button @click.prevent="OrderToFullScreenOrBack(order.id)" class="z-1 w-1/2 text-center transition ease-out overflow-hidden relative
+                hover:scale-110 border w-fit px-3 py-2 rounded-2xl flex items-center text-white before:transition before:ease-out before:duration-700
+                before:absolute before:bg-sky-800 before:rounded-full before:min-w-10 before:min-h-10 before:text-white before:translate-x-[6rem]
+                before:translate-y-[2.6rem] hover:before:scale-[10] hover:text-white hover:shadow-lg before:-z-10 font-semibold bg-sky-500">
                   <template v-if="orderFullScreen.state"><p class="truncate">Закрыть</p></template>
                   <template v-else><p class="truncate">Подробнее</p></template>
                 </button>
-                <button @click.prevent="OrderToFullScreenOrBack(order.id)" class="z-1 justify-center w-fit transition ease-out overflow-hidden relative hover:scale-110 border px-3 py-2 rounded-2xl flex items-center text-white before:transition before:ease-out before:duration-700 before:absolute before:bg-sky-800 before:rounded-full before:min-w-10 before:min-h-10 before:text-white before:translate-x-[6rem] before:translate-y-[2.6rem] hover:before:scale-[10] hover:text-white hover:shadow-lg before:-z-10 font-semibold bg-sky-500">
-                  <template v-if="orderFullScreen.state">
+                <button v-if="orderFullScreen.state" :class="{'scale-110':EditMode.Enabled}" @click.prevent="toggleEditMode" class="z-1 justify-center w-fit transition ease-out
+                overflow-hidden relative hover:scale-110 border px-3 py-2 rounded-2xl flex items-center text-white before:transition before:ease-out before:duration-700 before:absolute
+                before:bg-sky-800 before:rounded-full before:min-w-10 before:min-h-10 before:text-white before:translate-x-[6rem] before:translate-y-[2.6rem] hover:before:scale-[10] hover:text-white
+                hover:shadow-lg before:-z-10 font-semibold bg-sky-500">
+                  <template v-if="!EditMode.Enabled">
                     <p class="truncate">Редактировать</p>
+                  </template>
+                  <template v-else-if="EditMode.Enabled">
+                    <p class="truncate">Назад</p>
                   </template>
                   <template v-else>
                     <img src="/src/assets/edit.svg" class="max-h-6 p-1" alt="">
