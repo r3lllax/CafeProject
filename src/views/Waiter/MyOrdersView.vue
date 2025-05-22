@@ -11,12 +11,50 @@ const MyOrders = ref({
   isProcessing:false,
 })
 
+const RefreshData = ref(false)
+
+const Timer = ref(5)
+
+const EnableDataRefresh = ref(0)
+async function delayedLoop() {
+  for (EnableDataRefresh.value; EnableDataRefresh.value>0;) {
+    if(!EnableDataRefresh.value){
+      break
+    }
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    if(!EnableDataRefresh.value){
+      break
+    }
+    Timer.value-=1
+    if(Timer.value<=0){
+      LoadOrders()
+      Timer.value=5
+    }
+
+  }
+}
+
 onMounted( async ()=>{
   await LoadOrders()
+  delayedLoop();
+
   if(localStorage.getItem('lastViewOrder')){
     OrderToFullScreenOrBack(localStorage.getItem('lastViewOrder'))
   }
 })
+
+const ToggleDataRefresh = ()=>{
+  if(!EnableDataRefresh.value){
+    EnableDataRefresh.value = !EnableDataRefresh.value
+    Timer.value=5
+    delayedLoop();
+
+  }
+  else{
+    EnableDataRefresh.value = !EnableDataRefresh.value
+  }
+
+}
 
 const LoadOrders = async ()=>{
   if(MyOrders.value.isProcessing){
@@ -210,7 +248,12 @@ const DelPos = async (OrderID,PosId)=>{
   <main class="w-full flex justify-center">
     <div class=" w-full md:w-1/2 self-center justify-center p-5 flex gap-3 flex-col">
       <h2 class="text-4xl font-bold">Ваши заказы:</h2>
-      <li v-if="!MyOrders.errors.error && !MyOrders.isProcessing " @click.prevent="OpenAddOrder" class="hover:bg-blue-400 hover:text-white hover:scale-[1.01] relative transition cursor-pointer border-gray-200 border col-span-12 p-6 bg-white rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-center items-center text-neutral-500">
+      <p v-if="EnableDataRefresh">До обновления данных:{{Timer}}</p>
+      <button v-if="(!MyOrders.isProcessing || EnableDataRefresh) " @click.prevent="ToggleDataRefresh">
+        <template v-if="EnableDataRefresh">Выключить авто-обновление данных</template>
+        <template v-else>Включить авто-обновление данных</template>
+      </button>
+      <li v-if="!MyOrders.errors.error && (!MyOrders.isProcessing || EnableDataRefresh) " @click.prevent="OpenAddOrder" class="hover:bg-blue-400 hover:text-white hover:scale-[1.01] relative transition cursor-pointer border-gray-200 border col-span-12 p-6 bg-white rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-center items-center text-neutral-500">
         <div class="w-full h-full peer absolute top-0 bottom-0 right-0 left-0"></div>
         <span class="transition duration-700 peer-hover:scale-[2] peer-hover:rotate-[360deg] peer-hover:font-bold">+</span>
       </li>
