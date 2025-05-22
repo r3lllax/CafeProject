@@ -24,6 +24,7 @@ const loadOrder = async ()=>{
     OrderData.value.startBucket = response.data[0].positions
     OrderData.value.data = response.data[0];
     for (let item of OrderData.value.startBucket){
+      console.log(item)
       Bucket.value.push(item)
     }
   }
@@ -114,12 +115,16 @@ const addPositionInBucket = (PosID)=>{
 }
 
 const DelPos = (PosId) =>{
+  console.log(PosId)
   let position = Bucket.value.find(item => item.id == PosId)
+  console.log(position)
   let indexOfPos = Bucket.value.indexOf(Bucket.value.find(item => item.id == PosId))
   Bucket.value.splice(indexOfPos, 1);
   if(OrderData.value.startBucket.find(item => item.id == PosId)){
     OrderData.value.deletedFromStartBucked.push(position)
+    console.log("DELET FROM START")
   }
+
 }
 
 const back = ()=>{
@@ -141,7 +146,6 @@ const increase = (PosID) =>{
 const decrease = (PosID) =>{
 
   let position = Bucket.value.find(item => item.menu_id == PosID)
-  let indexOfPos = Bucket.value.indexOf(position)
   let onePrice = position.price/position.count
 
   if(position.count>1){
@@ -161,19 +165,53 @@ const save = async ()=>{
   if(SaveProcessing.value){
     return
   }
-  SaveProcessing.value = true
-  for (let DeleteFetchItem of OrderData.value.startBucket){
-    const responce = await apiFetch('DELETE',`/order/${OrderData.value.data.id}/position/${DeleteFetchItem.id}`)
+
+
+  let Count = 0
+
+
+  for (let item of OrderData.value.startBucket){
+    let diffItem = { "menu_id": item.menu_id, "count": item.count, "position": item.position, "price": item.price }
+    for(let item2 of Bucket.value){
+      let secondDiffItem = { "menu_id": item2.menu_id, "count": item2.count, "position": item2.position, "price": item2.price }
+      if(JSON.stringify(diffItem)==JSON.stringify(secondDiffItem)){
+        Count++
+      }
+    }
+  }
+  
+
+
+  if((Count==OrderData.value.startBucket.length && OrderData.value.startBucket.length==Bucket.value.length)
+    || Bucket.value.length==0 && OrderData.value.startBucket.length==0){
+
+    return
   }
 
-  for (let AddFetchItem of Bucket.value){
-    const body = {"menu_id":AddFetchItem.menu_id, "count":AddFetchItem.count}
-    const responce = await apiFetch('POST',`/order/${OrderData.value.data.id}/position`,body)
+  SaveProcessing.value = true
+  try{
+    Tint.value.errors = {}
+    for (let DeleteFetchItem of OrderData.value.startBucket){
+      const responce = await apiFetch('DELETE',`/order/${OrderData.value.data.id}/position/${DeleteFetchItem.id}`)
+    }
 
+    for (let AddFetchItem of Bucket.value){
+      const body = {"menu_id":AddFetchItem.menu_id, "count":AddFetchItem.count}
+      const responce = await apiFetch('POST',`/order/${OrderData.value.data.id}/position`,body)
+
+    }
+    Tint.value.data.message = ""
+  }
+  catch (e){
+    Tint.value.erros.message = e
   }
   document.body.scrollTop = document.documentElement.scrollTop = 0;
   SaveProcessing.value = false
   SuccesSave.value = true
+  console.log(OrderData.value)
+
+  Bucket.value = []
+  loadOrder()
 }
 
 const openMenu = ()=>{
@@ -187,9 +225,17 @@ const openMenu = ()=>{
     div.classList.add("max-h-0");
   }
 }
+
+const Tint = ref({
+  data:{},
+  errors:{},
+  processing:false,
+})
+
 </script>
 
 <template>
+
   <div v-if="SuccesSave" class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md" role="alert">
     <div class="flex">
       <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
@@ -211,8 +257,8 @@ const openMenu = ()=>{
       <div class="transition-all min-w-full overflow-hidden shadow-lg flex flex-col gap-2">
         <p id="collapsible" class="transition-all overflow-y-scroll duration-700 max-h-0 w-full">
           <div class="flex gap-2 justify-between flex-wrap p-5">
-            <div class="w-full md:w-fit px-3 py-1 shadow-lg md:rounded-full hover:scale-110 transition-all" v-for="category of menu.data" v-if="menu.processed">
-              <button @click.prevent="openCategory(category.name)">{{category.name}}</button>
+            <div @click.prevent="openCategory(category.name)" class="w-full md:w-fit px-3 py-1 shadow-lg md:rounded-full hover:scale-110 transition-all" v-for="category of menu.data" v-if="menu.processed">
+              <button>{{category.name}}</button>
             </div>
             <div v-else class="w-full flex justify-center">
               <svg aria-hidden="true" class="w-7 h-7 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -293,7 +339,7 @@ const openMenu = ()=>{
             </div>
           </template>
         </button>
-        <button @click.prevent="save" class="cursor-pointer w-full md:w-fit min-h-1/2 items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <button id="SaveBtn" @click.prevent="save" class="cursor-pointer w-full md:w-fit min-h-1/2 items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           <template v-if="!SaveProcessing">Сохранить</template>
           <template v-else>
             <div class="w-full flex justify-center">
