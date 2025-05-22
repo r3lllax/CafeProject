@@ -18,7 +18,6 @@ const loadOrder = async ()=>{
   OrderData.value.isProcessing = true
   const response = await apiFetch("GET",`/order/${id}`)
   if (response.data) {
-    console.log(response.data[0].status)
     if(response.data[0].status!="Принят"){
       await router.replace('/not-found')
     }
@@ -48,7 +47,6 @@ const LoadMenu = async () =>{
     }
   }
   menu.value.processed = true
-  console.log(menu.value)
 }
 
 const OrderData=ref({
@@ -86,7 +84,6 @@ const ActiveMenuPage = ref({
 })
 
 const openCategory = (category) =>{
-  console.log(category)
   ActiveMenuPage.value.category=category
   let findCategory=''
   switch (category){
@@ -105,9 +102,7 @@ const openCategory = (category) =>{
 
 const addPositionInBucket = (PosID)=>{
   let position = ActiveMenuPage.value.dishes.find(item=>item.id==PosID)
-  console.table(position)
   let posInOrder =Bucket.value.find(item=>item.menu_id==position.id)
-  console.table(Bucket.value)
   if(posInOrder){
     posInOrder.count++
     posInOrder.price+=position.price
@@ -136,7 +131,7 @@ const back = ()=>{
 }
 
 const increase = (PosID) =>{
-  let posInOrder =Bucket.value.find(item=>item.id==PosID)
+  let posInOrder =Bucket.value.find(item=>item.menu_id==PosID)
   if(posInOrder){
     let onePrice = posInOrder.price/posInOrder.count
     posInOrder.count++
@@ -144,7 +139,8 @@ const increase = (PosID) =>{
   }
 }
 const decrease = (PosID) =>{
-  let position = Bucket.value.find(item => item.id == PosID)
+
+  let position = Bucket.value.find(item => item.menu_id == PosID)
   let indexOfPos = Bucket.value.indexOf(position)
   let onePrice = position.price/position.count
 
@@ -250,11 +246,11 @@ const openMenu = ()=>{
 <!--            <div class="font-semibold border-b text-center text-neutral-400  md:border-b-0 md:border-r w-full md:w-fit p-2 text-xl">{{position.id}}</div>-->
             <div class="font-semibold border-b text-center md:border-b-0 w-full p-2 text-xl overflow-hidden text-ellipsis">{{position.position}}</div>
             <div class="flex justify-center items-center font-semibold border-b text-center md:border-b-0 w-full md:w-fit p-2 text-xl">
-              <div @click.prevent="decrease(position.id)" class="transition cursor-pointer flex justify-center items-center h-5 w-5  px-2 hover:bg-neutral-300 bg-white rounded-full">
+              <div @click.prevent="decrease(position.menu_id)" class="transition cursor-pointer flex justify-center items-center h-5 w-5  px-2 hover:bg-neutral-300 bg-white rounded-full">
                 <span  class="h-5 w-5 flex items-center justify-center">-</span>
               </div>
               <div>{{position.count}}</div>
-              <div @click.prevent="increase(position.id)" class="transition cursor-pointer flex justify-center items-center h-5 w-5  px-2 hover:bg-neutral-300 bg-white rounded-full">
+              <div @click.prevent="increase(position.menu_id)" class="transition cursor-pointer flex justify-center items-center h-5 w-5  px-2 hover:bg-neutral-300 bg-white rounded-full">
                 <span  class="h-5 w-5 flex items-center justify-center">+</span>
               </div>
             </div>
