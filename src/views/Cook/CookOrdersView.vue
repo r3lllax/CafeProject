@@ -13,6 +13,13 @@ const MyOrders = ref({
 
 onMounted( async ()=>{
   await LoadOrders()
+  if(localStorage.getItem('RefreshDataState')=='true'){
+    ToggleDataRefresh()
+  }
+  else{
+    delayedLoop();
+  }
+
   if(localStorage.getItem('lastViewOrder')){
     OrderToFullScreenOrBack(localStorage.getItem('lastViewOrder'))
   }
@@ -228,6 +235,8 @@ const ToggleDataRefresh = ()=>{
   else{
     EnableDataRefresh.value = !EnableDataRefresh.value
   }
+  localStorage.setItem('RefreshDataState',EnableDataRefresh.value)
+
 
 }
 
@@ -236,13 +245,19 @@ const ToggleDataRefresh = ()=>{
 <template>
 
   <main class="w-full flex justify-center">
-    <div class=" w-full md:w-1/2 self-center justify-center p-5 flex gap-3 flex-col">
+    <div class="relative w-full md:w-1/2 self-center justify-center p-5 flex gap-3 flex-col">
       <h2 class="text-4xl font-bold">Заказы:</h2>
-      <p v-if="EnableDataRefresh">До обновления данных:{{Timer}}</p>
-      <button v-if="(!MyOrders.isProcessing || EnableDataRefresh) " @click.prevent="ToggleDataRefresh">
-        <template v-if="EnableDataRefresh">Выключить авто-обновление данных</template>
-        <template v-else>Включить авто-обновление данных</template>
-      </button>
+      <div class="flex justify-between flex-col md:flex-row w-full">
+        <button class="transition-all  hover:scale-110 hover:shadow-lg p-5 rounded-full" v-if="(!MyOrders.isProcessing || EnableDataRefresh) " @click.prevent="ToggleDataRefresh">
+          <template v-if="EnableDataRefresh"><span class="bg-red-500 px-3 py-1 rounded-full text-white">Выключить</span> авто-обновление данных</template>
+          <template v-else><span class="bg-green-500 px-3 py-1 rounded-full text-white">Включить</span> авто-обновление данных</template>
+        </button>
+        <p :class="{'opacity-100':EnableDataRefresh}" class="flex items-center transition opacity-0 gap-1 absolute top-0 right-0">
+          <p>До обновления данных:</p>
+          <span class="text-center align-middle px-2 text-white bg-yellow-500 rounded-full">{{Timer}}</span>
+        </p>
+
+      </div>
       <div class="relative w-full h-full" v-if="MyOrders.data.length">
         <ul class="grid grid-cols-12 gap-3">
           <li :id="order.id" class="overflow-y-auto transition items-center hover:scale-110 shadow-lg border col-span-12 sm:col-span-6 xl:col-span-4 rounded-xl flex flex-col gap-3 justify-between p-5" v-for="order of MyOrders.data">
