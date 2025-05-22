@@ -314,7 +314,7 @@ const DelPos = async (OrderID,PosId)=>{
                         {{order.price_all}}
                       </span>
                 </div>
-                <li v-if="orderFullScreen.state && (order.status=='Принят' || order.status=='Готов')" @click.prevent="editOrder(order.id)" class="hover:bg-blue-400 hover:text-white hover:scale-[1.01] relative transition cursor-pointer border-gray-200 border col-span-12 p-6 bg-white rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-center items-center text-neutral-500">
+                <li v-if="orderFullScreen.state && (order.status=='Принят') &&EditMode.Enabled" @click.prevent="editOrder(order.id)" class="hover:bg-blue-400 hover:text-white hover:scale-[1.01] relative transition cursor-pointer border-gray-200 border col-span-12 p-6 bg-white rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-center items-center text-neutral-500">
                   <div class="w-full h-full peer absolute top-0 bottom-0 right-0 left-0"></div>
                   <span class="transition duration-700 peer-hover:scale-[2] peer-hover:rotate-[360deg] peer-hover:font-bold">+</span>
                 </li>
