@@ -47,16 +47,18 @@ const TryLogin = async ()=>{
 
 <template>
   <main class="w-full flex justify-center ">
-    <div class="w-full md:w-1/2 self-center border justify-center items-center ">
+    <div class="w-full md:w-1/2 self-center  justify-center items-center ">
 
-      <form @submit.prevent="TryLogin" class="mt-10 w-3/4 md:max-w-sm mx-auto pb-5">
-        <div class="mb-5">
-          <label for="login" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Login</label>
-          <input type="text" v-model="form.data.login" id="login" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="login" />
+      <form @submit.prevent="TryLogin" class="mt-10 flex flex-col items-center w-3/4 md:max-w-sm mx-auto pb-5">
+        <img src="/src/assets/coffee.png" class="max-h-52 max-w-52" alt="">
+        <h1 class="text-4xl break-words w-full text-center my-4">Вход в аккаунт</h1>
+        <div class="mb-5 w-full">
+          <label for="login" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Логин</label>
+          <input type="text" v-model="form.data.login" id="login" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
         </div>
-        <div class="mb-5">
-          <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-          <input type="password" v-model="form.data.password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="password"  />
+        <div class="mb-5 w-full">
+          <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Пароль</label>
+          <input type="password" v-model="form.data.password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""  />
         </div>
 
         <button type="submit" :class="{'bg-blue-800':form.isProcess,'cursor-default':form.isProcess}" class="justify-self-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">

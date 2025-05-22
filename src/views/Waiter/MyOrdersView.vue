@@ -247,13 +247,14 @@ const DelPos = async (OrderID,PosId)=>{
 
   <main class="w-full flex justify-center">
     <div class=" w-full md:w-1/2 self-center justify-center p-5 flex gap-3 flex-col">
-      <h2 class="text-4xl font-bold">Ваши заказы:</h2>
+      <h2 class="text-4xl font-bold">Ваши заказы за текущую смену:</h2>
       <p v-if="EnableDataRefresh">До обновления данных:{{Timer}}</p>
       <button v-if="(!MyOrders.isProcessing || EnableDataRefresh) " @click.prevent="ToggleDataRefresh">
         <template v-if="EnableDataRefresh">Выключить авто-обновление данных</template>
         <template v-else>Включить авто-обновление данных</template>
       </button>
-      <li v-if="!MyOrders.errors.error && (!MyOrders.isProcessing || EnableDataRefresh) " @click.prevent="OpenAddOrder" class="hover:bg-blue-400 hover:text-white hover:scale-[1.01] relative transition cursor-pointer border-gray-200 border col-span-12 p-6 bg-white rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-center items-center text-neutral-500">
+      <li v-if="!MyOrders.errors.error && (!MyOrders.isProcessing || EnableDataRefresh) " @click.prevent="OpenAddOrder"
+          class="hover:bg-blue-400 hover:text-white hover:scale-[1.01] relative transition cursor-pointer border-gray-200 border col-span-12 p-6 bg-white rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-center items-center text-neutral-500">
         <div class="w-full h-full peer absolute top-0 bottom-0 right-0 left-0"></div>
         <span class="transition duration-700 peer-hover:scale-[2] peer-hover:rotate-[360deg] peer-hover:font-bold">+</span>
       </li>
@@ -389,7 +390,7 @@ const DelPos = async (OrderID,PosId)=>{
       </div>
     </div>
   </main>
-  <div :class="{'absolute':modal.Open,'hidden':!modal.Open}" class=" top-0 bottom-0 right-0 left-0 bg-black/50 flex justify-center items-center" style="z-index: 22;">
+  <div :class="{'fixed':modal.Open,'hidden':!modal.Open}" class=" top-0 bottom-0 right-0 left-0 bg-black/50 flex justify-center items-center" style="z-index: 22;">
     <div class="w-2/3 md:w-1/4 h-fit rounded-xl bg-white flex flex-col gap-3 p-5">
       <div>
         <button @click.prevent="toggleModal" class="cursor-pointer w-full  min-h-1/2 items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Закрыть</button>
