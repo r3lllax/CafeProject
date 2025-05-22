@@ -122,7 +122,6 @@ const DelPos = (PosId) =>{
   Bucket.value.splice(indexOfPos, 1);
   if(OrderData.value.startBucket.find(item => item.id == PosId)){
     OrderData.value.deletedFromStartBucked.push(position)
-    console.log("DELET FROM START")
   }
 
 }
@@ -255,9 +254,10 @@ const Tint = ref({
       </div>
 
       <div class="transition-all min-w-full overflow-hidden shadow-lg flex flex-col gap-2">
-        <p id="collapsible" class="transition-all overflow-y-scroll duration-700 max-h-0 w-full">
-          <div class="flex gap-2 justify-between flex-wrap p-5">
-            <div @click.prevent="openCategory(category.name)" class="w-full md:w-fit px-3 py-1 shadow-lg md:rounded-full hover:scale-110 transition-all" v-for="category of menu.data" v-if="menu.processed">
+        <p id="collapsible" class="transition-all overflow-y-scroll duration-700 max-h-0 w-full flex flex-col gap-2">
+          <div class="flex gap-2 justify-between flex-wrap p-5 bg-neutral-700 rounded text-white">
+            <div @click.prevent="openCategory(category.name)" :class="{'bg-neutral-500 border border-white text-white scale-110':ActiveMenuPage.category == category.name}"
+                 class="w-full md:w-fit px-3 py-1 shadow-lg md:rounded-full hover:scale-110 transition-all" v-for="category of menu.data" v-if="menu.processed">
               <button>{{category.name}}</button>
             </div>
             <div v-else class="w-full flex justify-center">
@@ -267,8 +267,8 @@ const Tint = ref({
               </svg>
             </div>
           </div>
-          <div class="grid grid-cols-12 w-full h-full gap-3">
-            <div class="col-span-12 md:col-span-6 lg:col-span-4 justify-start xl:col-span-3 shadow-lg p-5 rounded flex flex-col" v-for="dish of ActiveMenuPage.dishes">
+          <div class="grid grid-cols-12 w-full h-full gap-3 p-10 rounded bg-neutral-500">
+            <div class="bg-white col-span-12 md:col-span-6 lg:col-span-4 justify-start xl:col-span-3 shadow-lg p-5 rounded flex flex-col" v-for="dish of ActiveMenuPage.dishes">
               <div class="flex flex-col justify-between h-full gap-3">
                 <div>
                   <div class="text-neutral-400 " >{{dish.id}}</div>
