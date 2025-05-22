@@ -285,9 +285,9 @@ const Tint = ref({
           </div>
         </p>
       </div>
-      <h3 class="text-4xl font-semibold">Корзина заказа</h3>
-      <div class="h-fit w-full shadow-lg rounded-xl" v-if="Bucket.length">
-        <ul class="w-full flex flex-col p-5 gap-1">
+      <h3 class="py-5 text-4xl font-semibold">Корзина заказа</h3>
+      <div class="h-fit w-full shadow-lg bg-neutral-500 rounded-xl" v-if="Bucket.length">
+        <ul class="w-full flex flex-col  p-5 gap-1">
           <li class="transition bg-white px-4 py-1 shadow-sm rounded-2xl hover:scale-[1.05] flex flex-col md:flex-row justify-center items-center" v-for="position of Bucket">
 <!--            <div class="font-semibold border-b text-center text-neutral-400  md:border-b-0 md:border-r w-full md:w-fit p-2 text-xl">{{position.id}}</div>-->
             <div class="font-semibold border-b text-center md:border-b-0 w-full p-2 text-xl overflow-hidden text-ellipsis">{{position.position}}</div>
